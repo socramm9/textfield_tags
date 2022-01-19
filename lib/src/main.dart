@@ -154,7 +154,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
     return TextField(
       controller: _textEditingController,
       autocorrect: false,
-      focusNode: focusNode,
+      focusNode: widget.focusNode,
       cursorColor: widget.textFieldStyler.cursorColor,
       style: widget.textFieldStyler.textStyle,
       decoration: InputDecoration(
