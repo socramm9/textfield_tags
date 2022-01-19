@@ -34,12 +34,15 @@ class TextFieldTags extends StatefulWidget {
   ///Enter optional String separators to split tags. Default is [","," "]
   final List<String>? textSeparators;
 
+  final FocusNode? focusNode;
+
   TextFieldTags({
     Key? key,
     this.tagsDistanceFromBorderEnd = 0.725,
     this.scrollableTagsPadding = const EdgeInsets.symmetric(horizontal: 4.0),
     this.scrollableTagsMargin,
     this.validator,
+    this.focusNode,
     this.initialTags = const [],
     this.textSeparators = const [" ", ","],
     required this.tagsStyler,
@@ -151,6 +154,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
     return TextField(
       controller: _textEditingController,
       autocorrect: false,
+      focusNode: focusNode,
       cursorColor: widget.textFieldStyler.cursorColor,
       style: widget.textFieldStyler.textStyle,
       decoration: InputDecoration(
