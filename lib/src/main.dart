@@ -13,6 +13,8 @@ class TextFieldTags extends StatefulWidget {
   ///[onTag] must not be [null] and should be implemented
   final void Function(String tag) onTag;
 
+  final void Function(String tag) onSearchChange;
+
   ///[onDelete] must not be [null]
   final void Function(String tag) onDelete;
 
@@ -49,6 +51,7 @@ class TextFieldTags extends StatefulWidget {
     required this.textFieldStyler,
     required this.onTag,
     required this.onDelete,
+    required this.onSearchChange,
   });
 
   @override
@@ -223,6 +226,12 @@ class _TextFieldTagsState extends State<TextFieldTags> {
         }
       },
       onChanged: (value) {
+        if (value == " ") {
+          _textEditingController?.text = "";
+          return;
+        }
+
+        widget.onSearchChange(value);
         if (_showValidator == false) {
           final containedSeparator = widget.textSeparators!
               .cast<String?>()
