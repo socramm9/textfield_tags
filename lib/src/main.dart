@@ -154,126 +154,133 @@ class _TextFieldTagsState extends State<TextFieldTags> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
-      controller: _textEditingController,
-      autocorrect: false,
-      focusNode: widget.focusNode,
-      cursorColor: widget.textFieldStyler.cursorColor,
-      style: widget.textFieldStyler.textStyle,
-      decoration: InputDecoration(
-        icon: widget.textFieldStyler.icon,
-        contentPadding: widget.textFieldStyler.contentPadding,
-        isDense: widget.textFieldStyler.isDense,
-        helperText: _showValidator
-            ? _validatorMessage
-            : widget.textFieldStyler.helperText,
-        helperStyle: _showValidator
-            ? const TextStyle(color: Colors.red)
-            : widget.textFieldStyler.helperStyle,
-        hintText: !_showPrefixIcon ? widget.textFieldStyler.hintText : null,
-        hintStyle: !_showPrefixIcon ? widget.textFieldStyler.hintStyle : null,
-        filled: widget.textFieldStyler.textFieldFilled,
-        fillColor: widget.textFieldStyler.textFieldFilledColor,
-        enabled: widget.textFieldStyler.textFieldEnabled,
-        border: widget.textFieldStyler.textFieldBorder,
-        focusedBorder: widget.textFieldStyler.textFieldFocusedBorder,
-        disabledBorder: widget.textFieldStyler.textFieldDisabledBorder,
-        enabledBorder: widget.textFieldStyler.textFieldEnabledBorder,
-        prefixIcon: _showPrefixIcon
-            ? ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: _deviceWidth * widget.tagsDistanceFromBorderEnd,
-                ),
-                child: Container(
-                  margin: widget.scrollableTagsMargin,
-                  padding: widget.scrollableTagsPadding,
-                  child: SingleChildScrollView(
-                    controller: _scrollController,
-                    scrollDirection: Axis.horizontal,
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: _getTags,
+    return LayoutBuilder(
+      builder: (context, constrains) {
+        return TextField(
+          controller: _textEditingController,
+          autocorrect: false,
+          focusNode: widget.focusNode,
+          cursorColor: widget.textFieldStyler.cursorColor,
+          style: widget.textFieldStyler.textStyle,
+          decoration: InputDecoration(
+            icon: widget.textFieldStyler.icon,
+            contentPadding: widget.textFieldStyler.contentPadding,
+            isDense: widget.textFieldStyler.isDense,
+            helperText: _showValidator
+                ? _validatorMessage
+                : widget.textFieldStyler.helperText,
+            helperStyle: _showValidator
+                ? const TextStyle(color: Colors.red)
+                : widget.textFieldStyler.helperStyle,
+            hintText: !_showPrefixIcon ? widget.textFieldStyler.hintText : null,
+            hintStyle:
+                !_showPrefixIcon ? widget.textFieldStyler.hintStyle : null,
+            filled: widget.textFieldStyler.textFieldFilled,
+            fillColor: widget.textFieldStyler.textFieldFilledColor,
+            enabled: widget.textFieldStyler.textFieldEnabled,
+            border: widget.textFieldStyler.textFieldBorder,
+            focusedBorder: widget.textFieldStyler.textFieldFocusedBorder,
+            disabledBorder: widget.textFieldStyler.textFieldDisabledBorder,
+            enabledBorder: widget.textFieldStyler.textFieldEnabledBorder,
+            prefixIcon: _showPrefixIcon
+                ? ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: constrains.maxWidth * 0.8,
                     ),
-                  ),
-                ),
-              )
-            : null,
-      ),
-      onSubmitted: (value) {
-        if (_showValidator == false) {
-          final String val = value.trim().toLowerCase();
-          _textEditingController!.clear();
-          if (widget.validator == null || widget.validator!(val) == null) {
-            widget.onTag(val);
-            if (!_showPrefixIcon) {
-              setState(() {
-                _tagsStringContents!.add(val);
-                _showPrefixIcon = true;
-              });
-            } else {
-              setState(() {
-                _tagsStringContents!.add(val);
-              });
-            }
-            this._animateTransition();
-          } else {
-            setState(() {
-              _showValidator = true;
-              _validatorMessage = widget.validator!(val)!;
-            });
-          }
-        }
-      },
-      onChanged: (value) {
-        if (value == " " || value.startsWith(",")) {
-          _textEditingController?.text = "";
-          return;
-        }
-
-        widget.onSearchChange(value);
-        if (_showValidator == false) {
-          final containedSeparator = widget.textSeparators!
-              .cast<String?>()
-              .firstWhere(
-                  (element) =>
-                      value.contains(element!) && value.indexOf(element) != 0,
-                  orElse: () => null);
-          if (containedSeparator != null) {
-            final splits = value.split(containedSeparator);
-            final int indexer =
-                splits.length > 1 ? splits.length - 2 : splits.length - 1;
-            final String lastLastTag =
-                splits.elementAt(indexer).trim().toLowerCase();
-
-            _textEditingController!.clear();
-
-            if (widget.validator == null ||
-                widget.validator!(lastLastTag) == null) {
-              widget.onTag(lastLastTag);
-              if (!_showPrefixIcon) {
-                setState(() {
-                  _tagsStringContents!.add(lastLastTag);
-                  _showPrefixIcon = true;
-                });
+                    child: Container(
+                      margin: widget.scrollableTagsMargin,
+                      padding: widget.scrollableTagsPadding,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        reverse: true,
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: _getTags,
+                        ),
+                      ),
+                    ),
+                  )
+                : null,
+          ),
+          onSubmitted: (value) {
+            if (_showValidator == false) {
+              final String val = value.trim().toLowerCase();
+              _textEditingController!.clear();
+              if (widget.validator == null || widget.validator!(val) == null) {
+                widget.onTag(val);
+                if (!_showPrefixIcon) {
+                  setState(() {
+                    _tagsStringContents!.add(val);
+                    _showPrefixIcon = true;
+                  });
+                } else {
+                  setState(() {
+                    _tagsStringContents!.add(val);
+                  });
+                }
+                this._animateTransition();
               } else {
                 setState(() {
-                  _tagsStringContents!.add(lastLastTag);
+                  _showValidator = true;
+                  _validatorMessage = widget.validator!(val)!;
                 });
               }
-              this._animateTransition();
+            }
+          },
+          onChanged: (value) {
+            if (value == " " || value.startsWith(",")) {
+              _textEditingController?.text = "";
+              return;
+            }
+
+            widget.onSearchChange(value);
+            if (_showValidator == false) {
+              final containedSeparator = widget.textSeparators!
+                  .cast<String?>()
+                  .firstWhere(
+                      (element) =>
+                          value.contains(element!) &&
+                          value.indexOf(element) != 0,
+                      orElse: () => null);
+              if (containedSeparator != null) {
+                final splits = value.split(containedSeparator);
+                final int indexer =
+                    splits.length > 1 ? splits.length - 2 : splits.length - 1;
+                final String lastLastTag =
+                    splits.elementAt(indexer).trim().toLowerCase();
+
+                _textEditingController!.clear();
+
+                if (widget.validator == null ||
+                    widget.validator!(lastLastTag) == null) {
+                  widget.onTag(lastLastTag);
+                  if (!_showPrefixIcon) {
+                    setState(() {
+                      _tagsStringContents!.add(lastLastTag);
+                      _showPrefixIcon = true;
+                    });
+                  } else {
+                    setState(() {
+                      _tagsStringContents!.add(lastLastTag);
+                    });
+                  }
+                  this._animateTransition();
+                } else {
+                  setState(() {
+                    _showValidator = true;
+                    _validatorMessage = widget.validator!(lastLastTag)!;
+                  });
+                }
+              }
             } else {
               setState(() {
-                _showValidator = true;
-                _validatorMessage = widget.validator!(lastLastTag)!;
+                _showValidator = false;
               });
             }
-          }
-        } else {
-          setState(() {
-            _showValidator = false;
-          });
-        }
+          },
+        );
       },
     );
   }
