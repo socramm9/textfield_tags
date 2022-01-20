@@ -142,7 +142,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
 
   void _animateTransition() {
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      if (_scrollController!.hasClients) {
+      if (_scrollController != null && _scrollController!.hasClients) {
         _scrollController!.animateTo(
           _scrollController!.position.maxScrollExtent,
           duration: const Duration(milliseconds: 300),
@@ -226,7 +226,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
         }
       },
       onChanged: (value) {
-        if (value == " ") {
+        if (value == " " || value.startsWith(",")) {
           _textEditingController?.text = "";
           return;
         }
