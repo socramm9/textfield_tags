@@ -185,14 +185,14 @@ class _TextFieldTagsState extends State<TextFieldTags> {
             prefixIcon: _showPrefixIcon
                 ? ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: constrains.maxWidth * 0.8,
+                      maxWidth: constrains.maxWidth / 0.2,
                     ),
                     child: Container(
+                      color: Colors.red
                       margin: widget.scrollableTagsMargin,
                       padding: widget.scrollableTagsPadding,
                       child: SingleChildScrollView(
                         controller: _scrollController,
-                        reverse: true,
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
@@ -206,7 +206,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
           ),
           onSubmitted: (value) {
             if (_showValidator == false) {
-              final String val = value.trim().toLowerCase();
+              final String val = value.trim();
               _textEditingController!.clear();
               if (widget.validator == null || widget.validator!(val) == null) {
                 widget.onTag(val);
@@ -249,7 +249,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
                 final int indexer =
                     splits.length > 1 ? splits.length - 2 : splits.length - 1;
                 final String lastLastTag =
-                    splits.elementAt(indexer).trim().toLowerCase();
+                    splits.elementAt(indexer).trim();
 
                 _textEditingController!.clear();
 
