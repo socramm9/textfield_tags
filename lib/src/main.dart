@@ -188,7 +188,7 @@ class _TextFieldTagsState extends State<TextFieldTags> {
                       maxWidth: constrains.maxWidth / 0.2,
                     ),
                     child: Container(
-                      color: Colors.red
+                      color: Colors.red,
                       margin: widget.scrollableTagsMargin,
                       padding: widget.scrollableTagsPadding,
                       child: SingleChildScrollView(
