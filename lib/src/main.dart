@@ -185,14 +185,14 @@ class _TextFieldTagsState extends State<TextFieldTags> {
             prefixIcon: _showPrefixIcon
                 ? ConstrainedBox(
                     constraints: BoxConstraints(
-                      maxWidth: constrains.maxWidth / 0.2,
+                      maxWidth: constrains.maxWidth * 0.8,
                     ),
                     child: Container(
-                      color: Colors.red,
                       margin: widget.scrollableTagsMargin,
                       padding: widget.scrollableTagsPadding,
                       child: SingleChildScrollView(
                         controller: _scrollController,
+                        reverse: true,
                         scrollDirection: Axis.horizontal,
                         child: Row(
                           mainAxisSize: MainAxisSize.min,
